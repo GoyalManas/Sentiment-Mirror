@@ -1,0 +1,12 @@
+<!-- full_articles.html -->
+
+{% extends 'index.html' %}
+
+{% block content %}
+  {% for article in full_articles %}
+    <h2>{{ article.title }}</h2>
+    <p>{{ article.content }}</p>
+    <img src="{{ article.img_url }}" alt="{{ article.title }}">
+    <a href="{{ article.url }}" target="_blank">Read more</a>
+  {% endfor %}
+{% endblock %}

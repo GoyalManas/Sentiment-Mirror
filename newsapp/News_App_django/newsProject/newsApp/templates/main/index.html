@@ -1,0 +1,187 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.5.3/cyborg/bootstrap.min.css"
+        integrity="sha512-QzwqVdCfEIUhmovYlJ/ET11Uh4MLuvEpwVpTVTRhChwzgfkrQH9BMcDvgwFpi5fMUGVLJAPsEXJVHuODuhmctg=="
+        crossorigin="anonymous" />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <title>News App</title>
+    <style>
+        body {
+           
+        font-family: 'Helvetica Neue', Arial, sans-serif;
+        background-color: #ffffff; /* White */
+        color: #000000; /* Black */
+            margin-top: 60px; /* Adjusted to accommodate fixed navbar */
+        }
+        .container form input {
+        background-color: #333; /* Light Black */
+        color: #ffffff; /* White text */
+        border: 1px solid #333; /* Light Black */
+        transition: background-color 0.3s ease; /* Add smooth transition */
+    }
+
+   
+
+    .container form button {
+        background-color: #f3b43f; /* Light Orange */
+        color: #000000; /* Black */
+        border: 1px solid #ffa500; /* Light Orange */
+    }
+    .border-custom {
+      border-color: lightcoral;    }
+
+
+
+
+        .navbar {
+            background-color: #343a40;
+        }
+
+        .jumbotron {
+            background-color: #343a40;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .jumbotron h2 {
+            color: #17a2b8;
+        }
+
+        .container {
+            margin-top: 20px;
+        }
+
+        .card {
+            background-color: #343a40;
+            border: 2px solid #e6af37;
+            border-radius: 10px;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .card:hover {
+            transform: scale(1.05);
+        }
+
+        .card img {
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+            max-height: 200px;
+            object-fit: cover;
+
+        }
+        
+
+        .card-title a {
+            color: #ffffff;
+            text-decoration: none;
+        }
+
+        .card-title a:hover {
+            text-decoration: underline;
+        }
+
+        .card-text {
+            font-size: 13px;
+            color: #ced4da;
+        }
+
+        .modal-content {
+            background-color: #343a40;
+            color: #ffffff;
+        }
+
+        .modal-body {
+            color: #ced4da;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="navbar fixed-top navbar-dark bg-dark">
+        <div class="container">
+            <h4 style="color:rgb(222, 165, 42)">News App </h4>
+        </div>
+    </div>
+
+    <!-- Card for header -->
+    <div class="jumbotron">
+    </div>
+
+    <!-- Search Bar -->
+    <div class="container">
+        <form method="get" class="mb-4">
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="Enter News Topic" name="topic" value="{{ topic }}">
+                <div class="input-group-append">
+                    <button type="submit" class="btn btn-primary">Search</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- Main -->
+    <div class="container">
+        <div class="row">
+            {% for article in mylist %}
+            <div class="col-md-4">
+                <div class="card border-custom mb-3">
+                    <a href="{{ article.article_url }}" target="_blank">
+                        <img src="{{ article.img_url }}" class="card-img-top" alt="Image">
+                    </a>
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <a href="{{ article.article_url }}" class="card-link">{{ article.title }}</a>
+                        </h5>
+                        <p class="card-text">
+                            {{ article.desc|truncatechars:150 }}
+                            {% if article.desc|length > 150 %}
+                            <a href="{{ article.article_url }}" class="btn btn-link" target="_blank">Read More</a>
+                            {% endif %}
+                        </p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Modal for full content -->
+    {% for article in mylist %}
+    <div class="modal fade" id="readMoreModal{{ forloop.counter }}" tabindex="-1" role="dialog"
+        aria-labelledby="readMoreModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="readMoreModalLabel">Full Content</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    {{ article.desc }}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.7/dist/umd/popper.min.js"
+        integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"
+        integrity="sha384-pzjw8b+ua/CCEKjbOTthiEWUDL25LtlXDEj0I5a9OtjWgIQQIxW1cCD/h5N0pexP"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>
